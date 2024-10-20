@@ -7,7 +7,8 @@ with open("README.md", "r", encoding="utf-8") as f:
 
 setup(
     name="pyhOn",
-    version="0.17.5",
+    use_scm_version=True,
+    setup_requires=["setuptools_scm"],
     author="Andre Basche",
     description="Control hOn devices with python",
     long_description=long_description,
