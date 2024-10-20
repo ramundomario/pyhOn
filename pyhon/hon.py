@@ -103,11 +103,6 @@ class Hon:
     async def setup(self) -> None:
         appliances = await self.api.load_appliances()
         for appliance in appliances:
-            if (zones := int(appliance.get("zone", "0"))) > 1:
-                for zone in range(zones):
-                    await self._create_appliance(
-                        appliance.copy(), self.api, zone=zone + 1
-                    )
             await self._create_appliance(appliance, self.api)
         if (
             self._test_data_path
