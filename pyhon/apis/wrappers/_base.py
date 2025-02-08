@@ -105,7 +105,7 @@ class SessionWrapper:
     def _log_history(self, text: str, flush: bool = True) -> None:
         if not self._history:
             return
-        
+
         lines = (
             ["hOn Authentication Error"]
             + [f" {i: 2d}     {resp}" for i, resp in enumerate(self._history, 1)]
