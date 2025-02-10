@@ -26,9 +26,13 @@ def loader(
         if HonCommand.parseable(command_data):
             commands[command_name] = HonCommand(command_name, command_data, appliance)
 
-        elif isinstance(command_data, dict) and command_data and all(
-            HonCommand.parseable(possible_category_data)
-            for possible_category_data in (command_data.values())
+        elif (
+            isinstance(command_data, dict)
+            and command_data
+            and all(
+                HonCommand.parseable(possible_category_data)
+                for possible_category_data in (command_data.values())
+            )
         ):
             # We need to declare the categories first, so we can reference them
             # when creating the commands
