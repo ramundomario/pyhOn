@@ -5,6 +5,8 @@ from pathlib import Path
 from pprint import pformat
 from typing import TYPE_CHECKING, Any, Final, Generic, TypeVar, cast, overload
 
+from aiohttp import ClientResponseError
+
 from pyhon import const, diagnose, exceptions
 from pyhon.apis import device as HonDevice
 from pyhon.attributes import Attribute
@@ -366,18 +368,26 @@ class Appliance:
         return payload
 
     async def load_statistics(self) -> None:
-        self.statistics = await self._api.call(
-            "statistics",
-            params={
-                "macAddress": self.mac_address,
-                "applianceType": self.appliance_type,
-            },
-        )
+        try:
+            self.statistics = await self._api.call(
+                "statistics",
+                params={
+                    "macAddress": self.mac_address,
+                    "applianceType": self.appliance_type,
+                },
+            )
+        except ClientResponseError as e:
+            _LOGGER.warning("Failed to load statistics: %s", e)
+            self.statistics = {}
 
     async def load_maintenance_cycle(self) -> None:
-        self.maintenance_cycle = await self._api.call(
-            "maintenance-cycle", params={"macAddress": self.mac_address}
-        )
+        try:
+            self.maintenance_cycle = await self._api.call(
+                "maintenance-cycle", params={"macAddress": self.mac_address}
+            )
+        except ClientResponseError as e:
+            _LOGGER.warning("Failed to load maintenance cycle: %s", e)
+            self.maintenance_cycle = {}
 
     async def send_command(
         self,
