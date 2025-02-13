@@ -78,7 +78,7 @@ class Appliance:
         target_cls: type["Appliance"] = target_classes.get(appliance_type, cls)
 
         for zone in range(int(appliance_data.get("zone", "1"))):
-            appliance = target_cls(api, appliance_data, zone=zone)
+            appliance = target_cls(api, appliance_data.copy(), zone=zone)
             if appliance.mac_address:
                 try:
                     await appliance.load_commands()
